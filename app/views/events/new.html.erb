@@ -1,9 +1,14 @@
 <% content_for :title, "New event" %>
+<div class="event-form-container">
+  <div class="event-form-card">
+    <h1>Create New Event</h1>
 
-<h1>Create New Event</h1>
+    <div class="current-user-info">
+      <p>Creating event as: <strong><%= current_user.email %></strong></p>
+    </div>
 
-<p>Creating event as: <strong><%= current_user.email %></strong></p>
+    <%= render 'form', event: @event %>
 
-<%= render 'form', event: @event %>
-
-<%= link_to 'Back to Events', events_path %>
+    <%= link_to 'Back to Events', events_path, class: 'back-link' %>
+  </div>
+</div>
