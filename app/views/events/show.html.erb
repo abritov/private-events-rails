@@ -1,10 +1,151 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="flash-message flash-notice">
+    <%= notice %>
+  </div>
+<% end %>
 
-<%= render @event %>
+<% if alert %>
+  <div class="flash-message flash-alert">
+    <%= alert %>
+  </div>
+<% end %>
 
-<div>
-  <%= link_to "Edit this event", edit_event_path(@event) %> |
-  <%= link_to "Back to events", events_path %>
+<div class="event-show-container">
+  <div class="event-show-card">
+    <!-- Event Header -->
+    <div class="event-show-header">
+      <div class="event-title-section">
+        <h1><%= @event.title %></h1>
+        <div class="event-meta-badges">
+          <span class="event-date-badge">
+            📅 <%= @event.date.strftime('%B %d, %Y at %I:%M %p') %>
+          </span>
+          <% if @event.user == current_user %>
+            <span class="event-owner-badge">Your Event</span>
+          <% end %>
+        </div>
+      </div>
 
-  <%= button_to "Destroy this event", @event, method: :delete %>
+      <div class="event-actions-header">
+        <%= link_to events_path, class: 'btn btn-outline' do %>
+          ← Back to Events
+        <% end %>
+
+        <% if user_signed_in? && @event.user == current_user %>
+          <div class="owner-actions">
+            <%= link_to edit_event_path(@event), class: 'btn btn-edit' do %>
+              ✏️ Edit
+            <% end %>
+            <%= button_to @event, method: :delete,
+                          data: { confirm: 'Are you sure you want to delete this event?' },
+                          class: 'btn btn-delete' do %>
+              🗑️ Delete
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Event Details -->
+    <div class="event-details-grid">
+      <div class="event-info-card">
+        <h3>📋 Event Details</h3>
+        <div class="detail-item">
+          <span class="detail-label">Location:</span>
+          <span class="detail-value">📍 <%= @event.location %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Organizer:</span>
+          <span class="detail-value">👤 <%= @event.user.email %></span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Attendees:</span>
+          <span class="detail-value">👥 <%= pluralize(@event.attendees.count, 'person') %></span>
+        </div>
+      </div>
+
+      <div class="event-description-card">
+        <h3>📖 Description</h3>
+        <div class="description-content">
+          <% if @event.description.present? %>
+            <%= simple_format(@event.description) %>
+          <% else %>
+            <p class="no-description">No description provided for this event.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Section -->
+    <% if user_signed_in? %>
+      <div class="attendance-section">
+        <div class="attendance-card">
+          <h3>🎯 Are you attending?</h3>
+          <div class="attendance-actions">
+            <% if current_user.attended_events.include?(@event) %>
+              <div class="attendance-status">
+                <span class="status-badge attending">✅ You're attending this event!</span>
+                <%= button_to 'Cancel Attendance', unattend_event_path(@event),
+                            method: :delete, class: 'btn btn-outline btn-sm' %>
+              </div>
+            <% else %>
+              <%= button_to attend_event_path(@event), method: :post, class: 'btn btn-primary' do %>
+                👍 I'll be there!
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="attendance-section">
+        <div class="attendance-card">
+          <h3>🎯 Interested in this event?</h3>
+          <p>Sign in to RSVP and join <%= pluralize(@event.attendees.count, 'other person') %>!</p>
+          <%= link_to 'Sign In to RSVP', new_user_session_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Attendees List -->
+    <div class="attendees-section">
+      <div class="attendees-card">
+        <h3>👥 Attendees (<%= @event.attendees.count %>)</h3>
+        <% if @event.attendees.any? %>
+          <div class="attendees-list">
+            <% @event.attendees.each do |attendee| %>
+              <div class="attendee-item">
+                <span class="attendee-avatar">👤</span>
+                <span class="attendee-name"><%= attendee.email %></span>
+                <% if attendee == @event.user %>
+                  <span class="organizer-badge">Organizer</span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="no-attendees">
+            <p>No attendees yet. Be the first to join!</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="event-bottom-actions">
+      <%= link_to events_path, class: 'btn btn-outline' do %>
+        ← Back to All Events
+      <% end %>
+
+      <% if user_signed_in? && @event.user == current_user %>
+        <div class="bottom-owner-actions">
+          <%= link_to 'Edit Event', edit_event_path(@event), class: 'btn btn-edit' %>
+          <%= button_to 'Delete Event', @event, method: :delete,
+                      data: { confirm: 'Are you sure you want to delete this event? This action cannot be undone.' },
+                      class: 'btn btn-delete' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
