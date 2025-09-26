@@ -13,16 +13,18 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = Event.new
+    @event = current_user.created_events.build
+    @event.date ||= DateTime.now + 1.day
   end
 
   # GET /events/1/edit
   def edit
+    # TODO owner check
   end
 
   # POST /events
   def create
-    @event = Event.new(event_params)
+    @event = current_user.created_events.build(event_params)
 
     if @event.save
       redirect_to @event, notice: "Event was successfully created."
@@ -33,6 +35,7 @@ class EventsController < ApplicationController
 
   # PATCH/PUT /events/1
   def update
+    # TODO owner check
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated.", status: :see_other
     else
@@ -42,6 +45,7 @@ class EventsController < ApplicationController
 
   # DELETE /events/1
   def destroy
+    # TODO owner check
     @event.destroy!
     redirect_to events_path, notice: "Event was successfully destroyed.", status: :see_other
   end
