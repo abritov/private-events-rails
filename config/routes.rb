@@ -17,4 +17,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resources :events do
+    member do
+      post 'attend'
+      delete 'unattend'
+    end
+  end
 end
