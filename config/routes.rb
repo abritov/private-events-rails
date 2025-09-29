@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: "users/sessions"
   }
-  root "inertia_example#index"
+  root "/events"
   get "/login", to: "home#login", as: :login_page
   get "/register", to: "home#register", as: :register_page
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
