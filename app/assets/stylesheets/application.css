@@ -593,7 +593,7 @@ input[type="datetime-local"] {
 .events-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 10px 20px;
 }
 
 .events-header {
@@ -1234,4 +1234,169 @@ input[type="datetime-local"] {
     .attendance-card {
         padding: 20px;
     }
+}
+
+/* Events Filter Styles */
+.events-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 5px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.filter-tab {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.filter-tab:hover {
+    background-color: #e9ecef;
+    color: #3498db;
+}
+
+.filter-tab.active {
+    background-color: #3498db;
+    color: white;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.events-count {
+    display: flex;
+    align-items: center;
+}
+
+.count-badge {
+    background-color: #f8f9fa;
+    color: #495057;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    border: 1px solid #e9ecef;
+}
+
+/* Event Status Badges */
+.event-date-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.event-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.event-status.upcoming {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.event-status.past {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Event Card States */
+.past-event {
+    opacity: 0.85;
+    border-left: 4px solid #e74c3c;
+}
+
+.upcoming-event {
+    border-left: 4px solid #27ae60;
+}
+
+.past-event .event-title {
+    color: #666;
+}
+
+.past-event .event-date {
+    background-color: #95a5a6;
+}
+
+/* Responsive Design for Filter */
+@media (max-width: 768px) {
+    .events-filter {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .filter-tabs {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .filter-tab {
+        padding: 8px 16px;
+        font-size: 0.85em;
+    }
+
+    .events-count {
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-tabs {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .filter-tab {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .event-date-badges {
+        align-items: stretch;
+        margin-top: 10px;
+    }
+
+    .event-status {
+        text-align: center;
+    }
+}
+
+/* Empty State Variations */
+.empty-state .empty-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
+/* Animation for filter changes */
+.events-grid {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.events-grid.loading {
+    opacity: 0.6;
 }

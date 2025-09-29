@@ -23,12 +23,34 @@
     <% end %>
   </div>
 
+  <!-- Events Filter Tabs -->
+  <div class="events-filter">
+    <div class="filter-tabs">
+      <%= link_to 'All Events', events_path, class: "filter-tab #{'active' if @filter.nil? || @filter == 'all'}" %>
+      <%= link_to 'Upcoming Events', events_path(filter: 'upcoming'), class: "filter-tab #{'active' if @filter == 'upcoming'}" %>
+      <%= link_to 'Past Events', events_path(filter: 'past'), class: "filter-tab #{'active' if @filter == 'past'}" %>
+    </div>
+
+    <div class="events-count">
+      <span class="count-badge">
+        <%= pluralize(@events.count, 'event') %> found
+      </span>
+    </div>
+  </div>
+
   <div class="events-grid">
     <% @events.each do |event| %>
-      <div class="event-card">
+      <div class="event-card <%= event.date < Time.current ? 'past-event' : 'upcoming-event' %>">
         <div class="event-header">
           <h3 class="event-title"><%= event.title %></h3>
-          <span class="event-date"><%= event.date.strftime('%b %d, %Y') %></span>
+          <div class="event-date-badges">
+            <span class="event-date"><%= event.date.strftime('%b %d, %Y') %></span>
+            <% if event.date < Time.current %>
+              <span class="event-status past">Past</span>
+            <% else %>
+              <span class="event-status upcoming">Upcoming</span>
+            <% end %>
+          </div>
         </div>
 
         <div class="event-details">
@@ -68,11 +90,35 @@
 
   <% if @events.empty? %>
     <div class="empty-state">
-      <div class="empty-icon">📅</div>
-      <h3>No Events Yet</h3>
-      <p>Be the first to create an event!</p>
+      <div class="empty-icon">
+        <% if @filter == 'past' %>
+          📚
+        <% elsif @filter == 'upcoming' %>
+          🎯
+        <% else %>
+          📅
+        <% end %>
+      </div>
+      <h3>
+        <% if @filter == 'past' %>
+          No Past Events
+        <% elsif @filter == 'upcoming' %>
+          No Upcoming Events
+        <% else %>
+          No Events Yet
+        <% end %>
+      </h3>
+      <p>
+        <% if @filter == 'past' %>
+          Past events will appear here once they're completed.
+        <% elsif @filter == 'upcoming' %>
+          No upcoming events scheduled yet.
+        <% else %>
+          Be the first to create an event!
+        <% end %>
+      </p>
       <% if user_signed_in? %>
-        <%= link_to 'Create Your First Event', new_event_path, class: 'btn btn-primary' %>
+        <%= link_to 'Create New Event', new_event_path, class: 'btn btn-primary' %>
       <% else %>
         <%= link_to 'Sign in to Create Events', new_user_session_path, class: 'btn btn-primary' %>
       <% end %>

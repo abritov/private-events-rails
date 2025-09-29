@@ -4,7 +4,16 @@ class EventsController < ApplicationController
 
   # GET /events
   def index
-    @events = Event.all
+    @filter = params[:filter]
+
+    case @filter
+    when 'past'
+      @events = Event.past.order(date: :desc)
+    when 'upcoming'
+      @events = Event.upcoming.order(date: :asc)
+    else
+      @events = Event.all.order(date: :asc)
+    end
   end
 
   # GET /events/1
